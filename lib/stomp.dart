@@ -176,7 +176,7 @@ abstract class StompClient {
    */
   void subscribeString(String id, String destination,
       void onMessage(Map<String, String> headers, String message),
-      {Ack ack: AUTO, String receipt, Matcher matcher: EXACT});
+      {Ack ack: AUTO, String receipt, Matcher matcher: EXACT, bool client_only: false});
   /** Subscribes for listening a given destination; assuming the message
    * are a JSON object.
    *

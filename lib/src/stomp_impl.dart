@@ -239,8 +239,8 @@ class _StompClient implements StompClient {
   @override
   void subscribeString(String id, String destination,
       void onMessage(Map<String, String> headers, String message),
-      {Ack ack: AUTO, String receipt, Matcher matcher: EXACT}) {
-    _subscribe(new _Subscriber.string(id, destination, onMessage, ack, matcher), receipt);
+      {Ack ack: AUTO, String receipt, Matcher matcher: EXACT, bool client_only: false}) {
+    _subscribe(new _Subscriber.string(id, destination, onMessage, ack, matcher), receipt, client_only: client_only);
   }
   @override
   void subscribeJson(String id, String destination,
@@ -277,7 +277,7 @@ class _StompClient implements StompClient {
     _receipts.remove(receipt);
   }
 
-  void _subscribe(_Subscriber subscriber, String receipt) {
+  void _subscribe(_Subscriber subscriber, String receipt, {bool client_only: false}) {
     _checkSend();
 
     final String id = subscriber.id;
@@ -286,17 +286,19 @@ class _StompClient implements StompClient {
 
     _subscribers[id] = subscriber;
 
-    final Map<String, String> headers = {
-      "id": id,
-      "destination": subscriber.destination
-    };
-    final Ack ack = subscriber.ack;
-    if (ack != AUTO)
-      headers["ack"] = ack.id;
-    if (receipt != null)
-      headers["receipt"] = receipt;
+    if ( ! client_only) {
+      final Map<String, String> headers = {
+        "id": id,
+        "destination": subscriber.destination
+      };
+      final Ack ack = subscriber.ack;
+      if (ack != AUTO)
+        headers["ack"] = ack.id;
+      if (receipt != null)
+        headers["receipt"] = receipt;
 
-    writeSimpleFrame(_connector, SUBSCRIBE, headers);
+      writeSimpleFrame(_connector, SUBSCRIBE, headers);
+    }
   }
 
   @override
