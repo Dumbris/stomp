@@ -225,7 +225,7 @@ abstract class StompClient {
    *
    * * [id] - specifies the id of the subscription.
    */
-  void unsubscribe(String id);
+  void unsubscribe(String id, {bool client_only: false});
 
   /** Adds a listener called when the RECEIPT frame of the given receipt-id
    * is received.
