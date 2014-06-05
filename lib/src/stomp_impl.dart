@@ -255,7 +255,7 @@ class _StompClient implements StompClient {
     _subscribe(new _Subscriber.blob(id, destination, onMessage, ack, matcher), receipt);
   }
   @override
-  void (String id, {bool client_only: false}) {
+  void unsubscribe(String id, {bool client_only: false}) {
     _checkSend();
 
     final _Subscriber sub = _subscribers[id];
